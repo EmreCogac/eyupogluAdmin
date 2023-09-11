@@ -20,39 +20,39 @@ type LoginResponse struct {
 	RefreshToken string `json:"refreshtoken"`
 }
 
-func Signup(c *gin.Context) {
-	var user models.User
-	err := c.ShouldBindJSON(&user)
-	if err != nil {
-		log.Println(err)
-		c.JSON(400, gin.H{
-			"Error": "Invalid Inputs ",
-		})
-		c.Abort()
-		return
-	}
-	err = user.HashPassword(user.Password)
-	if err != nil {
-		log.Println(err.Error())
-		c.JSON(500, gin.H{
-			"Error": "Error Hashing Password",
-		})
-		c.Abort()
-		return
-	}
-	err = user.CreateUserRecord()
-	if err != nil {
-		log.Println(err)
-		c.JSON(500, gin.H{
-			"Error": "Error Creating User",
-		})
-		c.Abort()
-		return
-	}
-	c.JSON(200, gin.H{
-		"Message": "Sucessfully Register",
-	})
-}
+// func Signup(c *gin.Context) {
+// 	var user models.User
+// 	err := c.ShouldBindJSON(&user)
+// 	if err != nil {
+// 		log.Println(err)
+// 		c.JSON(400, gin.H{
+// 			"Error": "Invalid Inputs ",
+// 		})
+// 		c.Abort()
+// 		return
+// 	}
+// 	err = user.HashPassword(user.Password)
+// 	if err != nil {
+// 		log.Println(err.Error())
+// 		c.JSON(500, gin.H{
+// 			"Error": "Error Hashing Password",
+// 		})
+// 		c.Abort()
+// 		return
+// 	}
+// 	err = user.CreateUserRecord()
+// 	if err != nil {
+// 		log.Println(err)
+// 		c.JSON(500, gin.H{
+// 			"Error": "Error Creating User",
+// 		})
+// 		c.Abort()
+// 		return
+// 	}
+// 	c.JSON(200, gin.H{
+// 		"Message": "Sucessfully Register",
+// 	})
+// }
 
 func Login(c *gin.Context) {
 	var payload LoginPayload

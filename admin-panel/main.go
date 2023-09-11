@@ -29,7 +29,7 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
+	r.GET("/eyupoglu/ilanlar", func(c *gin.Context) {
 		c.String(200, "Welcome To This Website")
 	})
 
@@ -41,7 +41,7 @@ func setupRouter() *gin.Engine {
 
 			public.POST("/login", controllers.Login)
 
-			public.POST("/signup", controllers.Signup)
+			// public.POST("/signup", controllers.Signup)
 		}
 
 		protected := api.Group("/protected").Use(middlewares.Authz())
