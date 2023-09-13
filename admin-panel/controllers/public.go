@@ -112,3 +112,7 @@ func Login(c *gin.Context) {
 	}
 	c.JSON(200, tokenResponse)
 }
+
+func getAll() {
+
+}

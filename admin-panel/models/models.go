@@ -15,6 +15,16 @@ type User struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type Ilanlar struct {
+	gorm.Model
+	ID       uint8  `gorm:"primaryKey"`
+	Location string `gorm:"type:varchar(30);not null"`
+	Type     string `gorm:"type:varchar(30);not null"`
+	Info     string `gorm:"type:varchar(30);not null"`
+	State    string `gorm:"type:varchar(30);not null"`
+	Img      []byte `json:"picture"`
+}
+
 func (user *User) CreateUserRecord() error {
 	result := database.GlobalDB.Create(&user)
 	if result.Error != nil {
