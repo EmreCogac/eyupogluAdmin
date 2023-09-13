@@ -11,9 +11,7 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/eyupoglu/ilanlar", func(c *gin.Context) {
-		c.String(200, "Welcome To This Website")
-	})
+	r.GET("/eyupoglu/ilanlar", controllers.GetAll)
 
 	api := r.Group("/api")
 	{

@@ -18,11 +18,21 @@ type User struct {
 type Ilanlar struct {
 	gorm.Model
 	ID       uint8  `gorm:"primaryKey"`
+	Title    string `gorm:"type:varchar(30);not null"`
 	Location string `gorm:"type:varchar(30);not null"`
 	Type     string `gorm:"type:varchar(30);not null"`
-	Info     string `gorm:"type:varchar(30);not null"`
+	Info     string `gorm:"type:varchar(40);not null"`
 	State    string `gorm:"type:varchar(30);not null"`
 	Img      []byte `json:"picture"`
+}
+
+func (post *Ilanlar) CreatePost() error {
+	result := database.GlobalDB.Create(&post)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+
 }
 
 func (user *User) CreateUserRecord() error {

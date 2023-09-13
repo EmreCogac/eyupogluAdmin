@@ -5,6 +5,7 @@ import (
 	"admin-panel/admin-panel/database"
 	"admin-panel/admin-panel/models"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -18,6 +19,30 @@ type LoginPayload struct {
 type LoginResponse struct {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refreshtoken"`
+}
+
+func CreatePost(c *gin.Context) {
+	var post models.Ilanlar
+	err := c.ShouldBindJSON(&post)
+	if err != nil {
+		log.Println(err)
+		c.JSON(400, gin.H{
+			"err": "ivalid post require",
+		})
+
+	}
+	err = post.CreatePost()
+	if err != nil {
+		log.Println(err)
+		c.JSON(500, gin.H{
+			"err": "Error Creating User",
+		})
+
+	}
+	c.JSON(200, gin.H{
+		"Message": "Sucessfully Register",
+	})
+
 }
 
 // func Signup(c *gin.Context) {
@@ -113,6 +138,12 @@ func Login(c *gin.Context) {
 	c.JSON(200, tokenResponse)
 }
 
-func getAll() {
+func GetAll(ctx *gin.Context) {
 
+	db := database.GlobalDB
+	ilanlars := []models.Ilanlar{}
+	db.Find(&ilanlars)
+	ctx.JSON(http.StatusOK, gin.H{
+		"deneme ": ilanlars,
+	})
 }
