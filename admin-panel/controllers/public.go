@@ -55,7 +55,7 @@ func Delete(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	// hatalı
+	// biliom da ben de seni düsündüğümdane diyom
 	result := db.Where("id =? ", ID.Id).Find(&ilanlars)
 
 	if result == nil { // burada yanliş yazmışambir daha deneyelim
