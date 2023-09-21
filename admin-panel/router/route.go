@@ -12,7 +12,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/eyupoglu/ilanlar", controllers.GetAll)
-	r.POST("/test", controllers.Delete)
+	// r.POST("/test", controllers.Delete)
 
 	api := r.Group("/api")
 	{
@@ -22,7 +22,7 @@ func SetupRouter() *gin.Engine {
 
 			public.POST("/login", controllers.Login)
 
-			// public.POST("/signup", controllers.Signup)
+			// public.POST("/signup", controllers.Signup) // kanka kayıt işlemi için burayı kullan
 		}
 
 		protected := api.Group("/protected").Use(middlewares.Authz())
