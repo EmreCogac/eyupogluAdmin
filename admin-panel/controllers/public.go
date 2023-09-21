@@ -32,6 +32,27 @@ type ParamID struct {
 
 // }
 
+func Deneme(c *gin.Context) {
+
+	// var ID ParamID
+	var ilanlars models.Ilanlar
+
+	db := database.GlobalDB
+	// err := c.ShouldBindJSON(&ID)
+	// if err != nil {
+	// 	c.JSON(400, gin.H{
+	// 		"err ": "girdi alınamadi",
+	// 	})
+	// }
+
+	db.Where("id= 1").Find(&ilanlars)
+
+	c.JSON(200, gin.H{
+		"item": ilanlars.ID,
+	})
+
+}
+
 func Delete(c *gin.Context) {
 	var ID ParamID
 	var ilanlars models.Ilanlar
@@ -45,7 +66,18 @@ func Delete(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	db.Where("id =? ", ID.Id).Find(&ilanlars)
 
+	if ilanlars.ID == 0 {
+		log.Println("cant resolve id")
+		c.JSON(500, gin.H{
+			" err ": " cant find id ",
+			"id":    ilanlars.ID,
+		})
+		c.Abort()
+		return
+
+	}
 	err = ilanlars.DeletePost(ID.Id)
 	if err != nil {
 		log.Println(err)
@@ -54,18 +86,6 @@ func Delete(c *gin.Context) {
 		})
 		c.Abort()
 		return
-	}
-	// biliom da ben de seni düsündüğümdane diyom
-	result := db.Where("id =? ", ID.Id).Find(&ilanlars)
-
-	if result == nil { // burada yanliş yazmışambir daha deneyelim
-		log.Println("cant resolve id")
-		c.JSON(500, gin.H{
-			" err ": " cant find id ",
-		})
-		c.Abort()
-		return
-
 	}
 
 	c.JSON(200, gin.H{

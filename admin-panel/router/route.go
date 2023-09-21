@@ -12,6 +12,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/eyupoglu/ilanlar", controllers.GetAll)
+	r.POST("/test", controllers.Delete)
 
 	api := r.Group("/api")
 	{
