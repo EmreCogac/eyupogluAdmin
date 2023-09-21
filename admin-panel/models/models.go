@@ -18,15 +18,43 @@ type User struct {
 type Ilanlar struct {
 	gorm.Model
 	ID       uint8  `gorm:"primaryKey"`
-	Title    string `gorm:"type:varchar(30);not null"`
-	Location string `gorm:"type:varchar(30);not null"`
-	Type     string `gorm:"type:varchar(30);not null"`
-	Info     string `gorm:"type:varchar(40);not null"`
-	State    string `gorm:"type:varchar(30);not null"`
+	Title    string `gorm:"type:varchar(30);not null" binding:"required"`
+	Location string `gorm:"type:varchar(30);not null" binding:"required"`
+	Type     string `gorm:"type:varchar(30);not null" binding:"required"`
+	Info     string `gorm:"type:varchar(40);not null" binding:"required"`
+	State    string `gorm:"type:varchar(30);not null" binding:"required"`
 	Img      []byte `json:"picture"`
 }
 
-func (post *Ilanlar) CreatePost() error {
+// func (now *Ilanlar) UpdatePost(updateted *Ilanlar, id int) error {
+// 	db := database.GlobalDB
+
+// 	now.Title = updateted.Title
+// 	now.Location = updateted.Location
+// 	now.Type = updateted.Type
+// 	now.Info = updateted.Info
+// 	now.State = updateted.State
+// 	now.Img = updateted.Img
+
+// 	err := db.Save(&updateted)
+// 	if err != nil {
+// 		return err.Error
+// 	}
+// 	return nil
+
+// }
+
+func (deleted *Ilanlar) DeletePost(id int) error {
+	db := database.GlobalDB
+
+	err := db.Unscoped().Where("id =? ", id).Delete(&deleted)
+	if err != nil {
+		return err.Error
+	}
+	return nil
+}
+
+func (post *Ilanlar) ModelCreatePost() error {
 	result := database.GlobalDB.Create(&post)
 	if result.Error != nil {
 		return result.Error

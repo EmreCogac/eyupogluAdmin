@@ -4,6 +4,7 @@ import (
 	"admin-panel/admin-panel/auth"
 	"admin-panel/admin-panel/database"
 	"admin-panel/admin-panel/models"
+
 	"log"
 	"net/http"
 
@@ -21,6 +22,58 @@ type LoginResponse struct {
 	RefreshToken string `json:"refreshtoken"`
 }
 
+type ParamID struct {
+	Id int `json:"id" binding:"required"`
+}
+
+// func Update(c *gin.Context)  {
+// 	var ilanlars models.Ilanlar
+// 	db := database.GlobalDB
+
+// }
+
+func Delete(c *gin.Context) {
+	var ID ParamID
+	var ilanlars models.Ilanlar
+	db := database.GlobalDB
+	err := c.ShouldBindJSON(&ID)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": "Invalid id ",
+		})
+
+		c.Abort()
+		return
+	}
+
+	err = ilanlars.DeletePost(ID.Id)
+	if err != nil {
+		log.Println(err)
+		c.JSON(500, gin.H{
+			" err ": " error deleting post ",
+		})
+		c.Abort()
+		return
+	}
+	// hatalı
+	result := db.Where("id =? ", ID.Id).Find(&ilanlars)
+
+	if result == nil { // burada yanliş yazmışambir daha deneyelim
+		log.Println("cant resolve id")
+		c.JSON(500, gin.H{
+			" err ": " cant find id ",
+		})
+		c.Abort()
+		return
+
+	}
+
+	c.JSON(200, gin.H{
+		"sucsess": " deleted ",
+	})
+
+}
+
 func CreatePost(c *gin.Context) {
 	var post models.Ilanlar
 	err := c.ShouldBindJSON(&post)
@@ -30,17 +83,20 @@ func CreatePost(c *gin.Context) {
 			"err": "ivalid post require",
 		})
 
+		c.Abort()
+		return
 	}
-	err = post.CreatePost()
+	err = post.ModelCreatePost()
 	if err != nil {
 		log.Println(err)
 		c.JSON(500, gin.H{
-			"err": "Error Creating User",
+			"err": "Error Creating Post	",
 		})
-
+		c.Abort()
+		return
 	}
 	c.JSON(200, gin.H{
-		"Message": "Sucessfully Register",
+		"Message": "Sucessfully created cpost",
 	})
 
 }
@@ -138,12 +194,35 @@ func Login(c *gin.Context) {
 	c.JSON(200, tokenResponse)
 }
 
-func GetAll(ctx *gin.Context) {
-
+func GetAll(c *gin.Context) {
 	db := database.GlobalDB
 	ilanlars := []models.Ilanlar{}
 	db.Find(&ilanlars)
-	ctx.JSON(http.StatusOK, gin.H{
-		"deneme ": ilanlars,
+
+	c.JSON(http.StatusOK, gin.H{
+		"Posts": ilanlars,
 	})
 }
+
+// func DeletePost(c *gin.Context) {
+// 	db := database.GlobalDB
+// 	var id = c.Params.ByName("id")
+// 	var person models.Ilanlar
+// 	err := db.Where("ID = ?", id).Delete(&person, id)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		c.Abort()
+// 		return
+// 	}
+
+// 	c.JSON(200, gin.H{"id #" + id: "deleted"})
+
+// }
+// func DeletePayment(db *gorm.DB, id string) (int64, error) {
+// 	var deletedPayment models.Ilanlar
+// 	result := db.Where("id = ?", id).Delete(&deletedPayment)
+// 	if result.RowsAffected == 0 {
+// 		return 0, errors.New("payment data not update")
+// 	}
+// 	return result.RowsAffected, nil
+// }

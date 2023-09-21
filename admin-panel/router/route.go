@@ -28,6 +28,8 @@ func SetupRouter() *gin.Engine {
 		{
 
 			protected.GET("/profile", controllers.Profile)
+			protected.POST("/create", controllers.CreatePost)
+			protected.POST("/delete", controllers.Delete)
 		}
 	}
 
