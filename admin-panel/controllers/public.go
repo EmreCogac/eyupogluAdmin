@@ -32,26 +32,55 @@ type ParamID struct {
 
 // }
 
-func Deneme(c *gin.Context) {
-
-	// var ID ParamID
+//	func UpdatePerson(c *gin.Context) {
+//		var person models.Ilanlar
+//		db := database.GlobalDB
+//		id := c.Params.ByName("id")
+//		if err := db.Where("id = ?", id).First(&person).Error; err != nil {
+//			c.AbortWithStatus(404)
+//			fmt.Println(err)
+//		}
+//		c.BindJSON(&person)
+//		db.Save(&person)
+//		c.JSON(200, person)
+//	}
+func UpdatePost(c *gin.Context) {
+	var updatePost models.Ilanlar
 	var ilanlars models.Ilanlar
 
-	db := database.GlobalDB
-	// err := c.ShouldBindJSON(&ID)
-	// if err != nil {
-	// 	c.JSON(400, gin.H{
-	// 		"err ": "girdi alınamadi",
-	// 	})
-	// }
-
-	db.Where("id= 1").Find(&ilanlars)
-
+	err := c.ShouldBindJSON(&updatePost)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"err": "invalid ",
+		})
+		c.Abort()
+	}
+	ilanlars.UpdatePost(&updatePost, int(updatePost.ID))
 	c.JSON(200, gin.H{
-		"item": ilanlars.ID,
+		"işlem başarılı": "işlem başarılı",
 	})
-
 }
+
+// func Deneme(c *gin.Context) {
+
+// 	// var ID ParamID
+// 	var ilanlars models.Ilanlar
+
+// 	db := database.GlobalDB
+// 	// err := c.ShouldBindJSON(&ID)
+// 	// if err != nil {
+// 	// 	c.JSON(400, gin.H{
+// 	// 		"err ": "girdi alınamadi",
+// 	// 	})
+// 	// }
+
+// 	db.Where("id= 1").Find(&ilanlars)
+
+// 	c.JSON(200, gin.H{
+// 		"item": ilanlars.ID,
+// 	})
+
+// }
 
 func Delete(c *gin.Context) {
 	var ID ParamID

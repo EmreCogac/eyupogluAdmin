@@ -2,6 +2,7 @@ package models
 
 import (
 	"admin-panel/admin-panel/database"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -26,23 +27,23 @@ type Ilanlar struct {
 	Img      []byte `json:"picture"`
 }
 
-// func (now *Ilanlar) UpdatePost(updateted *Ilanlar, id int) error {
-// 	db := database.GlobalDB
+func (now *Ilanlar) UpdatePost(updateted *Ilanlar, id int) error {
 
-// 	now.Title = updateted.Title
-// 	now.Location = updateted.Location
-// 	now.Type = updateted.Type
-// 	now.Info = updateted.Info
-// 	now.State = updateted.State
-// 	now.Img = updateted.Img
+	db := database.GlobalDB
+	now.UpdatedAt = time.Now()
+	now.Title = updateted.Title
+	now.Location = updateted.Location
+	now.Type = updateted.Type
+	now.Info = updateted.Info
+	now.State = updateted.State
+	now.Img = updateted.Img
+	err := db.Where("id= ?", id).Updates(&now)
+	if err != nil {
+		return err.Error
+	}
+	return nil
 
-// 	err := db.Save(&updateted)
-// 	if err != nil {
-// 		return err.Error
-// 	}
-// 	return nil
-
-// }
+}
 
 func (deleted *Ilanlar) DeletePost(id int) error {
 	db := database.GlobalDB

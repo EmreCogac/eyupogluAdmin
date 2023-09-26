@@ -13,6 +13,7 @@ func SetupRouter() *gin.Engine {
 
 	r.GET("/eyupoglu/ilanlar", controllers.GetAll)
 	// r.POST("/test", controllers.Delete)
+	// r.POST("/deneme", controllers.UpdatePost)
 
 	api := r.Group("/api")
 	{
@@ -27,7 +28,7 @@ func SetupRouter() *gin.Engine {
 
 		protected := api.Group("/protected").Use(middlewares.Authz())
 		{
-
+			protected.GET("/update", controllers.UpdatePost)
 			protected.GET("/profile", controllers.Profile)
 			protected.POST("/create", controllers.CreatePost)
 			protected.POST("/delete", controllers.Delete)
